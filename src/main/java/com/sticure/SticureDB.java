@@ -8,10 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import org.apache.commons.io.FilenameUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +16,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.amdocs.tenbis.model.SticureEvents;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.sticure.model.SecurityEvent;
+import com.sticure.model.SecurityEvents;
 @Component
 @Scope(value = "prototype")
 public class SticureDB {
@@ -35,46 +33,39 @@ public class SticureDB {
 		sticureJsonFile = new File(restJsonPath);
 	}
 
-	public SticureEvents loadData() throws FileNotFoundException, IOException {
+	public SecurityEvents loadData() throws FileNotFoundException, IOException {
 		synchronized (log) {
 			return privateLoadData();
 		}
 	}
-	private SticureEvents privateLoadData() throws IOException, FileNotFoundException {
+	private SecurityEvents privateLoadData() throws IOException, FileNotFoundException {
 		log.info("Reading file: " + sticureJsonFile);
 		if (! sticureJsonFile.exists()){
-			return new SticureEvents();
+			return new SecurityEvents();
 		}
 		
 		try (BufferedReader reader = new BufferedReader(
 				new InputStreamReader(new FileInputStream(sticureJsonFile), StandardCharsets.UTF_8));) {
 			Gson gson = new Gson();
-			SticureEvents sticurityEvents = gson.fromJson(reader, SticureEvents.class);
+			SecurityEvents sticurityEvents = gson.fromJson(reader, SecurityEvents.class);
 			if (sticurityEvents == null){
-				sticurityEvents = new SticureEvents();
+				sticurityEvents = new SecurityEvents();
 			}
 			return sticurityEvents;
 		}
 	}
-	public void saveData(SticureEvents sticureEvents) throws IOException {
+	public void saveData(SecurityEvent event) throws IOException {
 		synchronized (log) {
-			privateSaveData(sticureEvents);
+			privateSaveData(event);
 		}
 	}
-	private void privateSaveData(SticureEvents sticureEvents) throws IOException {
+	private void privateSaveData(SecurityEvent event) throws IOException {
 		log.info("Writing to file: " + sticureJsonFile);
+		SecurityEvents securityEvents = privateLoadData();
+		securityEvents.getEvents().add(event);
 		try (Writer writer = new FileWriter(sticureJsonFile)) {
 			Gson gson = new GsonBuilder().setPrettyPrinting().create();
-			gson.toJson(sticureEvents, writer);
+			gson.toJson(securityEvents, writer);
 		}
 	}
-//	public void updateResturantDelivered(String resturantName) throws FileNotFoundException, IOException {
-//		synchronized (log) {
-//			log.info("Updating returant deliverred for resturant: " + resturantName);
-//			OrdersSummary ordersSummary = privateLoadData();
-//			ordersSummary.getResturantsOrders().get(resturantName).setDeliveryArrived(true);
-//			ordersSummary.getResturantsOrders().get(resturantName).setDeliveryArrivedDate(new Date());
-//			privateSaveData(ordersSummary);
-//		}
-//	}
 }

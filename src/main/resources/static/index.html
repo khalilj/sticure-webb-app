@@ -83,7 +83,7 @@
     icon="{ url:'img/pistol.png', scaledSize:[32,40], origin: [0,0], anchor: [16,40] }"
     animation="BOUNCE" 
     
-    position="{{pin.latitude}},{{pin.longitude}}" 
+    position="{{pin.lat}},{{pin.lon}}" 
     title="{{pin.title}}" 
     on-click="toggleBounce();"
     >
@@ -91,7 +91,7 @@
      <info-window id="myInfoWindow">
             <div ng-non-bindable class="card">
             <p><b>ALERT:</b><font color="red"> {{pin.title}}</font></p>
-                <p>Coordinates: {{pin.latitude}},{{pin.longitude}}</p>
+                <p>Coordinates: {{pin.lat}},{{pin.lon}}</p>
             </div>
         </info-window>
         

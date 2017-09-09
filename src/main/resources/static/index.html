@@ -39,7 +39,7 @@
 	<div class="container" data-ng-controller="securityEventConteroller"
 		data-ng-init="getSecurityEvent()">
 
-<ng-map id="map_canvas"  zoom-to-include-markers="true" style="position:relative; width:100%; height:500px;">
+<ng-map center="[32.707126,35.301647]" id="map_canvas"  zoom-to-include-markers="true" style="position:relative; width:100%; height:500px;">
     
     <marker 
     ng-repeat="pin in markerData" 

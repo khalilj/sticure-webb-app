@@ -39,48 +39,12 @@
 	<div class="container" data-ng-controller="securityEventConteroller"
 		data-ng-init="getSecurityEvent()">
 
-
-		<div ng-hide = "true"  class="row">
-			<h1 class="text-success text-center">Security Dashboard</h1>
-			<br>
-			<table class="table table-striped table-hover">
-				<thead class="text-danger">
-					<tr>
-						<th><h3>Incoming events</h3></th>
-					</tr>
-				</thead>
-				<tbody data-ng-repeat="event in securityEvents">
-					<tr ng-init="toggle[$index] = false"
-						ng-click="toggle[$index] = !toggle[$index]"
-						style="font-size: 25px; border: 0">
-						<td><span class="glyphicon glyphicon-plus-sign"
-							ng-if="!toggle[$index]"></span> <span
-							class="glyphicon glyphicon-minus-sign" ng-if="toggle[$index]"></span>
-
-							index={{ $index + 1 }} type={{event.type}} time={{event.time}}</td>
-					</tr>
-					<tr ng-if="toggle[$index]" style="font-size: 20px; border: 0">
-						<td>
-							<div class="card">
-								<div class="card-header">Featured</div>
-								<div class="card-block">
-									<h4 class="card-title">fire</h4>
-									<p class="card-text">lat={{event.lat}} lon={{event.lon}}</p>
-								</div>
-							</div>
-						</td>
-					</tr>
-
-				</tbody>
-			</table>
-		</div>
-
-
-<ng-map id="map_canvas"  zoom-to-include-markers="true" style="display:block; width:auto; height:auto;">
+<ng-map id="map_canvas"  zoom-to-include-markers="true" style="position:relative; width:100%; height:500px;">
+    
     <marker 
     ng-repeat="pin in markerData" 
     id="{{pin.id}}"
-    icon="{ url:'img/pistol.png', scaledSize:[32,40], origin: [0,0], anchor: [16,40] }"
+    icon="{{pin.imgUrl}}"
     animation="BOUNCE" 
     
     position="{{pin.lat}},{{pin.lon}}" 
@@ -88,10 +52,12 @@
     on-click="toggleBounce();"
     >
      
-     <info-window id="myInfoWindow">
-            <div ng-non-bindable class="card">
-            <p><b>ALERT:</b><font color="red"> {{pin.title}}</font></p>
+     <info-window id="myInfoWindow{{pin.id}}">
+            <div  >
+            <p><b><h4><font color="red"> {{pin.type}} </font></h4><font color="green"> {{pin.time}} </font> </b></p>
                 <p>Coordinates: {{pin.lat}},{{pin.lon}}</p>
+                <p><b><font color="red">{{pin.title}}</font></b></p>
+                
             </div>
         </info-window>
         

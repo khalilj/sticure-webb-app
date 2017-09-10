@@ -11,12 +11,7 @@ sticureApp.controller('securityEventConteroller', function($scope, $http,
 
 	NgMap.getMap().then(function(evtMap) {
 		$scope.map = evtMap;
-
 	});
-	//    $scope.markerData=[
-	//      {"id":1, "latitude":32.696002,"longitude":35.301039,"title":"BigFashion Nazareth on fire!!!"},
-	//      {"id":2,"latitude":32.707126,"longitude":35.301647,"title":"Dinner in St. Gabriel"},
-	//      {"id":3,"latitude":32.693525,"longitude":35.303422,"title":"Crime in el mashhadawe, EL KOL BYISHHAD!!!"}];
 
 	$scope.getSecurityEvent = function(e, prospect) {
 		$http.get('/getSecurityEvents').then(function(response) {
@@ -37,10 +32,31 @@ sticureApp.controller('securityEventConteroller', function($scope, $http,
 			alert("Error loading getSecurityEvent: " + error.statusText);
 		});
 	};
+	
+	$scope.dummyReportEvent = function(eventType){
+		$http.post('/dummyReportEvent/' + eventType).
+        then(function(response) {
+        }, function(error) {
+        	alert("Error calling dummyReportEvent: " + error.statusText);
+        });
+	};
+	
+	$scope.sendFire = function(){
+		$scope.dummyReportEvent("F");
+	};
+	
+	$scope.sendGun = function(){
+		$scope.dummyReportEvent("G");
+	};
 
 	$scope.toggleBounce = function(e, prospect) {
+//		$http.post('/setEventChecked/' + eventId).
+//        then(function(response) {
+//        }, function(error) {
+//        	alert("Error calling setEventChecked: " + error.statusText);
+//        });
+		
 		for ( var key in $scope.map.markers) {
-			
 			var mid = parseInt(key);
 			var m = $scope.map.markers[key];
 			if (mid == this.id) {
@@ -53,7 +69,13 @@ sticureApp.controller('securityEventConteroller', function($scope, $http,
 				$scope.map.hideInfoWindow('myInfoWindow' + m.id, this);
 			}
 		}
-
 	};
-
+	
+	$scope.getAnimation = function(isChecked){
+		if (! isChecked){
+			return "BOUNCE";
+		} else{
+			return "";
+		}
+	};
 });

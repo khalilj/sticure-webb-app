@@ -68,4 +68,25 @@ public class SticureDB {
 			gson.toJson(securityEvents, writer);
 		}
 	}
+
+	public void setEventChecked(String eventId) throws FileNotFoundException, IOException {
+		synchronized (log) {
+			SecurityEvents events = privateLoadData();
+			for (SecurityEvent event : events.getEvents()){
+				if (event.getId() == Integer.valueOf(eventId)){
+					event.setChecked(true);
+					break;
+				}
+			}
+			
+			privateSaveData(events);
+		}
+	}
+
+	private void privateSaveData(SecurityEvents events) throws IOException {
+		try (Writer writer = new FileWriter(sticureJsonFile)) {
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			gson.toJson(events, writer);
+		}
+	}
 }

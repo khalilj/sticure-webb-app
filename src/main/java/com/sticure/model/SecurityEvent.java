@@ -10,7 +10,14 @@ public class SecurityEvent {
 	private double lat;
 	private double lon;
 	private String imgUrl;
+	private boolean checked = false;
 	
+	public boolean isChecked() {
+		return checked;
+	}
+	public void setChecked(boolean checked) {
+		this.checked = checked;
+	}
 	public String getTitle() {
 		return title;
 	}

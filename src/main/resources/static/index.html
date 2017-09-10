@@ -45,11 +45,11 @@
     ng-repeat="pin in markerData" 
     id="{{pin.id}}"
     icon="{{pin.imgUrl}}"
-    animation="BOUNCE" 
+    animation="{{getAnimation(pin.checked)}}" 
     
     position="{{pin.lat}},{{pin.lon}}" 
     title="{{pin.title}}" 
-    on-click="toggleBounce();"
+    on-click="toggleBounce()"
     >
      
      <info-window id="myInfoWindow{{pin.id}}">
